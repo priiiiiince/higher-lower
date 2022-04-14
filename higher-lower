@@ -1,0 +1,89 @@
+from game_data import data
+import random
+import replit
+from art import logo, vs
+
+
+def random_question():
+    '''return detail for question name, job, country'''
+    description = ''
+    details = random.choice(data)
+    description += details.get('name') + ', '
+    description += details.get('description') + ', '
+    description += details.get('country')
+    return description
+
+
+def get_name(string_of_description):
+    name = string_of_description.split(', ')
+    return name[0]
+
+
+def get_follower(name):
+    '''get name as input and return follwer'''
+    for i in data:
+        for k, v in i.items():
+            if i.get('name') == name:
+                return i.get('follower_count')
+
+
+def compare_follower(follower_a, follower_b):
+    '''compare follower and return answer a/b'''
+    if follower_a > follower_b:
+        return 'a'
+    return 'b'
+
+
+def check_anwer_and_score(more_follower, answer, score):
+    if more_follower == answer:
+        print(f'\nCorrect !! \n')
+        return score + 1
+    print(f'You lose\nyour final score : {score}')
+    return False
+
+
+def game():
+    
+    game_on = True
+    score = 0
+
+    question_a = random_question()
+    name_a = get_name(question_a)
+    follower_a = get_follower(name_a)
+
+    while game_on:
+        print(logo)
+        if score > 0:
+            print(f'Correct ! Your score : {score}')
+        print(f"A : {question_a}")
+
+        question_b = random_question()
+        name_b = get_name(question_b)
+        follower_b = get_follower(name_b)
+        print(vs)
+        print(f'B : {question_b}')
+
+        more_follower = compare_follower(follower_a, follower_b)
+        print(more_follower)
+
+        
+        answer = input(
+            "Who has more followers on instagram? 'A' or 'B' : ").lower()
+
+        score = check_anwer_and_score(more_follower, answer, score)
+        if not score:
+            game_on = False
+        else:
+            
+            replit.clear()
+            
+
+        question_a = question_b
+        name_a = name_b
+        follower_a = follower_b
+    if input('play again? (y/n) : ') == 'y':
+        replit.clear()
+        game()
+
+
+game()
